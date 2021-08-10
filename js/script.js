@@ -1,82 +1,52 @@
-// alert espone 5 num random;
-var timesNum = 5;
+/* Un alert() espone 5 numeri generati casualmente.
+Da li parte un timer di 30 secondi.
+Dopo 30 secondi l'utente deve inserire, uno alla volta, i numeri che ha visto precedentemente, tramite il prompt().
+Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei numeri da indovinare sono stati individuati. */
 
-var numeriRandom = getNumsRandom(1, 100);
-console.log(numeriRandom);
+function memoGame(){
+  let numsPc = [];
 
-alert("Attenzione! Devi memorizzare i 5 numeri che compariranno! Pronto?");
-
-alert("memorizza: " + numeriRandom);
-
-
-// creo il countdown di 30 sec
-var secMancanti = 1;
-var stampa = document.getElementById("print");
-
-var timerId = setInterval(countdown, 1000);
-
-function countdown() {
-  if (secMancanti == -1) {
-    clearTimeout(timerId);
-    document.getElementById("print").innerHTML = "Inizio gioco, pronto? Vediamo quanto sei abile!";
-    closingAlert();
-  } else {
-    stampa.innerHTML = secMancanti + " secondi rimanenti.";
-    secMancanti--;
+  let i = 0;
+  while(numsPc.length < 5){
+    var numPc = Math.floor(Math.random() * 100) + 1;
+    if(!numsPc.includes(numPc)){
+      numsPc.push(numPc);
+    } 
+    i++;
   }
-}
+  numsPc = numsPc.join(" ") + ";";
+  // alert con numeri da memorizzare;
+  alert("I numeri da memorizzare sono: " + numsPc);
 
-// Dopo 30 secondi l'utente deve inserire, uno alla volta, i numeri che ha visto precedentemente, tramite il prompt().
-var numeriUtente = [];
-var indovinati = [];
-console.log(indovinati);
-// delay prompt
-// var time = 1000;
-// setTimeout(takePushNumUtente(time){
-//   secMancanti.SpawnCounter();
-// }, time);
-
-setTimeout(takePushNumUtente, 5000);
-
-// visualizzo quanti e in caso quali numeri sono stati indovinati
-
-// FUNZIONI
-
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min) ) + min;
-}
-
-function getNumsRandom(min, max){
-  var numbersRandom = [];
-  for (var i = 0; numbersRandom.length < timesNum; i++) {
-    var numRandom = getRndInteger(min, max);
-    if (!numbersRandom.includes(numRandom)) {
-      numbersRandom.push(numRandom);
-    } else {
-      var numRandom = getRndInteger(min, max);
+  const numsUtente = [];
+  setTimeout(function(){
+    let i = 0;
+    while(numsUtente.length < 5){
+      let numUtente = prompt("Inserisci un numero che ricordi. Attenzione: non si possono ripetere!!");
+      if(!numsUtente.includes(numUtente)){
+        numsUtente.push(numUtente);
+      }
+      i++;
     }
-  }
-  return numbersRandom;
-}
+    return numsUtente;
+  }, 30000);
+  
 
-function closingAlert(){
-  alert("Tempo scauto, chiudi la finestra e... buona fortuna!");
-}
+  let counter;
+  let numsOk = [];
 
-function takePushNumUtente(){
-
-  while ( numeriUtente.length < timesNum){
-
-    var numUtente = parseInt(prompt("Inserisci un numero fra 0 e 100. Attenzione a non ripetere."));
-
-    while (numUtente == isNaN || numUtente < 0 || numUtente > 100 || numeriUtente.includes(numUtente) ){
-
-      var numUtente = parseInt(prompt("Inserisci un numero fra 0 e 100, in cifre. Stare attenti che non sia già stato utilizzato."));
+  // console.log(numsUtente);
+  setTimeout(function(){
+    if(numsUtente.length == 5){
+    
+      for(let i = 0; i < numsUtente.length; i++){
+        if(numsPc.includes(numsUtente[i])){
+          numsOk.push(numsUtente[i]);
+        }
+      }
+      document.getElementById("print").innerHTML = "Hai indovinato " + numsOk.length + " numeri: " + numsOk.join(" ") + ";";
     }
-    if(!numeriUtente.includes(numUtente)){
-      numeriUtente.push(numUtente);
-    } else if (!numeriUtente.includes(numRandom)){
-      indovinati.push(numUtente);
-    }
-  }
+  }, 31000)
+
 }
+
